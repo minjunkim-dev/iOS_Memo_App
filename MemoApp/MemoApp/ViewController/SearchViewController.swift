@@ -27,6 +27,8 @@ class SearchViewController: UIViewController {
         tableView.dataSource = self
         searchBar.delegate = self
         
+        searchBar.becomeFirstResponder()
+        
         searchMemo = searchQueryFromMemo(text: searchBar.text ?? "")
         searchMemoCount = searchMemo.count
     }

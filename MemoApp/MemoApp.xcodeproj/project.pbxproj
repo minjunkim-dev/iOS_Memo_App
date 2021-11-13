@@ -25,6 +25,7 @@
 		B98170B42738F65F00057AE4 /* MemoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98170B32738F65F00057AE4 /* MemoTableViewCell.swift */; };
 		B98170B62738FAAC00057AE4 /* RealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98170B52738FAAC00057AE4 /* RealmModel.swift */; };
 		B9D4A8FA273E4949009F177F /* RealmQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D4A8F9273E4949009F177F /* RealmQuery.swift */; };
+		B9D4A8FD273F8A4E009F177F /* DateFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D4A8FC273F8A4E009F177F /* DateFormatter+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -46,6 +47,7 @@
 		B98170B32738F65F00057AE4 /* MemoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoTableViewCell.swift; sourceTree = "<group>"; };
 		B98170B52738FAAC00057AE4 /* RealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmModel.swift; sourceTree = "<group>"; };
 		B9D4A8F9273E4949009F177F /* RealmQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmQuery.swift; sourceTree = "<group>"; };
+		B9D4A8FC273F8A4E009F177F /* DateFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,6 +91,7 @@
 		B98170912738EC3F00057AE4 /* MemoApp */ = {
 			isa = PBXGroup;
 			children = (
+				B9D4A8FB273F8A18009F177F /* Extension */,
 				B9D4A8F7273E4921009F177F /* Realm */,
 				B93D9385273BC16C00BD2FB2 /* Cell */,
 				B98170A72738ED9900057AE4 /* Storyboard */,
@@ -131,6 +134,14 @@
 				B9D4A8F9273E4949009F177F /* RealmQuery.swift */,
 			);
 			path = Realm;
+			sourceTree = "<group>";
+		};
+		B9D4A8FB273F8A18009F177F /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				B9D4A8FC273F8A4E009F177F /* DateFormatter+Extension.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -219,6 +230,7 @@
 				B9D4A8FA273E4949009F177F /* RealmQuery.swift in Sources */,
 				B95EAFE0273B9B0D00524EFB /* WalkthroughViewController.swift in Sources */,
 				B98170972738EC3F00057AE4 /* MainViewController.swift in Sources */,
+				B9D4A8FD273F8A4E009F177F /* DateFormatter+Extension.swift in Sources */,
 				B98170B42738F65F00057AE4 /* MemoTableViewCell.swift in Sources */,
 				B98170932738EC3F00057AE4 /* AppDelegate.swift in Sources */,
 				B98170AB2738EDD300057AE4 /* SearchViewController.swift in Sources */,

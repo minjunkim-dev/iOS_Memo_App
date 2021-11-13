@@ -19,7 +19,6 @@ class MemoTableViewCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         
-        
     }
     
     func configureCell(row: Memo) {

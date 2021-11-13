@@ -24,15 +24,15 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uTg-hK-1ow">
                                         <rect key="frame" x="0.0" y="88" width="414" height="64"/>
                                         <subviews>
-                                            <searchBar contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="jGU-2V-72Q">
-                                                <rect key="frame" x="20" y="10" width="305.5" height="44"/>
+                                            <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="jGU-2V-72Q">
+                                                <rect key="frame" x="20" y="10" width="285.5" height="44"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </searchBar>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0ab-Xf-7Ur">
-                                                <rect key="frame" x="345.5" y="10" width="48.5" height="44"/>
+                                                <rect key="frame" x="325.5" y="10" width="68.5" height="44"/>
                                                 <color key="tintColor" systemColor="systemOrangeColor"/>
                                                 <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="취소"/>
+                                                <buttonConfiguration key="configuration" style="plain" title="Cancel"/>
                                                 <connections>
                                                     <action selector="cancleButtonClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="TTl-O6-2pp"/>
                                                 </connections>
@@ -122,7 +122,7 @@
                     <navigationItem key="navigationItem" id="JK8-8H-YaN"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <outlet property="searchBar" destination="jGU-2V-72Q" id="dUz-JY-t2g"/>
+                        <outlet property="searchBar" destination="jGU-2V-72Q" id="1jT-Ji-I6Z"/>
                         <outlet property="tableView" destination="ckm-QS-M5L" id="DMT-Ga-Pfh"/>
                     </connections>
                 </viewController>

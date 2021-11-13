@@ -15,23 +15,29 @@ class WriteEditViewController: UIViewController {
     
     let localRealm = try! Realm()
     
-    var writeButtonActionHandler: (() -> ())?
-    var selectCellActionHandler: (() -> ())?
+    var writeButtonActionHandler: (() -> Void)?
+    var selectCellActionHandler: (() -> Void)?
+    var backButtonActionHandler: (() -> Void)?
+    
+    var shareButton: UIBarButtonItem!
+    var compeletionButton: UIBarButtonItem!
+    
+    var memo: Memo?
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         
-        navigationController?.navigationBar.tintColor = .systemOrange
+        textView.delegate = self
+        textView.text = memo?.memoText
+        
+        navigationController?.navigationBar.tintColor = .systemYellow
         navigationController?.navigationBar.barTintColor = .systemGray6
         
-        let shareButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(shareButtonClicked))
+        shareButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(shareButtonClicked))
         
-        let compeletionButton = UIBarButtonItem(title: "완료", style: .plain, target: self, action: #selector(completionButtonClicked))
-        
-        navigationItem.rightBarButtonItems
-         = [compeletionButton, shareButton]
+        compeletionButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(completionButtonClicked))
         
         writeButtonActionHandler?()
         selectCellActionHandler?()
@@ -41,45 +47,71 @@ class WriteEditViewController: UIViewController {
         super.viewWillDisappear(animated)
 
         if self.isMovingFromParent {
-            backButtonClicked()
+            backButtonActionHandler?()
+            textView.text = nil
         }
     }
     
     @objc func completionButtonClicked() {
-    
-        /* 메모 저장 필요 */
-        saveMemo()
+        print(#function)
+                
+        navigationItem.rightBarButtonItems
+         = [shareButton]
+        
+        view.endEditing(true)
     }
     
-    func saveMemo() {
+    func writeMemo() {
         
-        if let text = textView.text?.components(separatedBy: CharacterSet.newlines) {
-            
-            let date = Date()
-            let time = date2TimeString(date: date)
-            let title = text.first
-            let content = text.last
-            let pinned = false
-            
-            let row = Memo(date: date, time: time, title: title, content: content, pinned: pinned)
-            try! self.localRealm.write {
-                localRealm.add(row)
-            }
-            
-            textView.text = nil
+        memo?.memoText = textView.text
+        let text = textView.text.components(separatedBy: CharacterSet.newlines)
+        
+        let result = text.filter { !($0.trimmingCharacters(in: .whitespaces).isEmpty) }
+        
+        guard let title = result.first else {
+            memo?.memoTitle = "New Note"
+            return
+        }
+        memo?.memoTitle = title
+        
+        if let content = result.last, title != content {
+            memo?.memoContent = content
+        } else {
+            memo?.memoContent = "New additional text"
         }
         
-        navigationController?.popViewController(animated: true)
+        guard let row = memo else { return }
+        
+        try! self.localRealm.write {
+            print("메모 쓰는중")
+            localRealm.add(row)
+        }
+        
     }
     
-    func date2TimeString(date: Date) -> String {
-     
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = .autoupdatingCurrent
-        dateFormatter.timeZone = .autoupdatingCurrent
-        dateFormatter.dateFormat = "yyyy. MM. dd a HH:mm"
+    func editMemo() {
+    
         
-        return dateFormatter.string(for: date) ?? ""
+        let text = textView.text.components(separatedBy: CharacterSet.newlines)
+        
+        let result = text.filter { !($0.trimmingCharacters(in: .whitespaces).isEmpty) }
+        
+        try! localRealm.write {
+            memo?.memoText = textView.text
+            print("메모 수정중")
+            guard let title = result.first else {
+                memo?.memoTitle = "New Note"
+                return
+                
+            }
+            memo?.memoTitle = title
+            
+            if let content = result.last, title != content {
+                memo?.memoContent = content
+            } else {
+                memo?.memoContent = "New additional text"
+            }
+        }
     }
     
     @objc func shareButtonClicked() {
@@ -96,10 +128,12 @@ class WriteEditViewController: UIViewController {
         
         self.present(activityViewController, animated: true, completion: nil)
     }
+}
+
+extension WriteEditViewController: UITextViewDelegate {
     
-    @objc func backButtonClicked() {
-        
-        /* 메모 저장 필요 */
-        saveMemo()
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        navigationItem.rightBarButtonItems
+         = [compeletionButton, shareButton]
     }
 }

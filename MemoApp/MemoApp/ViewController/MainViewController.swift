@@ -4,27 +4,17 @@ import UIKit
 
 import RealmSwift
 
-
-
 class MainViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var searchBar: UISearchBar!
+    @IBOutlet weak var writeButton: UIBarButtonItem!
+    @IBOutlet weak var toolBar: UIBarButtonItem!
     
     let localRealm = try! Realm()
 
     var unpinnedMemo: Results<Memo>!
     var pinnedMemo: Results<Memo>!
-    
-    func date2TimeString(date: Date) -> String? {
-     
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = .autoupdatingCurrent
-        dateFormatter.timeZone = .autoupdatingCurrent
-        dateFormatter.dateFormat = "yyyy. MM. dd a HH:mm"
-        
-        return dateFormatter.string(for: date)
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,20 +23,10 @@ class MainViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         searchBar.delegate = self
-        
-        
-        print("Realm is located at:", localRealm.configuration.fileURL!)
 
-        
-        unpinnedMemo = getMemo(pinned: false)
-        pinnedMemo = getMemo(pinned: true)
-
-        let numberFormatter = NumberFormatter()
-        numberFormatter.numberStyle = .decimal
-        let memoCount = numberFormatter.string(for: getAllMemoCount()) ?? "0"
-        self.navigationItem.title = "\(memoCount)개의 메모"
         self.navigationItem.largeTitleDisplayMode = .always
 
+        writeButton.tintColor = .systemYellow
         self.navigationController?.isToolbarHidden = false
         
         if !isAppAlreadyLaunchedOnce() {
@@ -61,6 +41,21 @@ class MainViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        print("Realm is located at:", localRealm.configuration.fileURL!)
+        unpinnedMemo = getMemo(pinned: false)
+        pinnedMemo = getMemo(pinned: true)
+
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        let memoCount = numberFormatter.string(for: getAllMemo().count) ?? "0"
+        self.navigationItem.title = "\(memoCount) Notes"
+        
+        tableView.reloadData()
+    }
+    
     @IBAction func writeButtonClicked(_ sender: UIBarButtonItem) {
         
         let storyboard = UIStoryboard(name: "WriteEdit", bundle: nil)
@@ -69,15 +64,28 @@ class MainViewController: UIViewController {
         
         vc.writeButtonActionHandler = {
             print("writeButtonActionHandler")
-            self.navigationItem.backButtonTitle = "메모"
+            self.navigationItem.backButtonTitle = "Memo"
             vc.textView.becomeFirstResponder()
         }
+        
+        vc.backButtonActionHandler = {
+            print("backButtonActionHandler")
+            
+            vc.writeMemo()
+            vc.navigationController?.popViewController(animated: true)
+        }
     
+        let date = Date()
+        let time = DateFormatter.date2String(date: date)
+        let memo = Memo(date: date, time: time)
+        vc.memo = memo
         navigationController?.pushViewController(vc, animated: true)
     }
-    
+
     func isAppAlreadyLaunchedOnce() -> Bool {
+        
         let defaults = UserDefaults.standard
+        
         if let _ = defaults.string(forKey: "isAppAlreadyLaunchedOnce") {
             print("App already launched")
             return true
@@ -93,12 +101,11 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         
-        if pinnedMemo.isEmpty {
-            return "메모"
+        if !(pinnedMemo.isEmpty) {
+            return section == 0 ? "Pinned" : "Notes"
         } else {
-            return section == 0 ? "고정된 메모" : "메모"
+            return nil
         }
-
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -221,7 +228,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
-        return UIScreen.main.bounds.height / 13
+        return pinnedMemo.isEmpty ? 0 : UIScreen.main.bounds.height / 13
         
     }
     
@@ -234,9 +241,32 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         
         vc.selectCellActionHandler = {
             print("selectCellActionHandler")
-            self.navigationItem.backButtonTitle = "검색"
+            self.navigationItem.backButtonTitle = "Memo"
+        }
+        
+        vc.backButtonActionHandler = {
+            print("backButtonActionHandler")
+            
+            vc.editMemo()
+            vc.navigationController?.popViewController(animated: true)
         }
     
+        var row: Memo
+        if pinnedMemo.isEmpty {
+            row = unpinnedMemo[indexPath.row]
+        } else {
+            indexPath.section == 0 ? (row = pinnedMemo[indexPath.row]) : (row = unpinnedMemo[indexPath.row])
+        }
+        
+        let date = row.memoDate
+        let time = row.memoTime
+        
+        try! localRealm.write {
+            row.memoDate = date
+            row.memoTime = time
+            vc.memo = row
+        }
+        
         navigationController?.pushViewController(vc, animated: true)
       
     }
@@ -245,8 +275,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 extension MainViewController: UISearchBarDelegate {
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        print(#function)
-        
+    
         let storyboard = UIStoryboard(name: "Search", bundle: nil)
 
         guard let vc = storyboard.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController else { return }
@@ -254,6 +283,8 @@ extension MainViewController: UISearchBarDelegate {
         let nav = UINavigationController(rootViewController: vc)
 
         nav.modalPresentationStyle = .fullScreen
+        nav.modalTransitionStyle = .crossDissolve
+        
         self.present(nav, animated: true, completion: nil)
     }
 }
