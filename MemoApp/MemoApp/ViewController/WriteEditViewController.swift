@@ -96,12 +96,24 @@ class WriteEditViewController: UIViewController {
                 return
                 
             }
+            
+            let previousTitle = memo?.memoTitle
             memo?.memoTitle = title
             
+            
+            let previousContent = memo?.memoContent
             if let content = result.last, title != content {
                 memo?.memoContent = content
             } else {
                 memo?.memoContent = "No additional text"
+            }
+            
+            
+            // 메모가 수정된 경우, 해당 시간으로 갱신 필요
+            if previousTitle != memo?.memoTitle || previousContent != memo?.memoContent {
+                memo?.memoDate = Date()
+                let time = DateFormatter.date2String(date: memo!.memoDate)
+                memo?.memoTime = time
             }
         }
     }

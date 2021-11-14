@@ -30,7 +30,9 @@ class MemoTableViewCell: UITableViewCell {
         memoTitleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
         memoTitleLabel.textColor = .white
         
-        memoTimeLabel.text = row.memoTime
+        //        memoTimeLabel.text = row.memoTime
+        let time = DateFormatter.date2String(date: row.memoDate)
+        memoTimeLabel.text = time
         memoTimeLabel.font = .systemFont(ofSize: 15, weight: .regular)
         memoTimeLabel.textColor = .systemGray
         
