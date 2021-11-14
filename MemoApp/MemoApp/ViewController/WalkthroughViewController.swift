@@ -28,7 +28,7 @@ class WalkthroughViewController: UIViewController {
         confirmButton.layer.cornerRadius = 10
         confirmButton.clipsToBounds = true
         confirmButton.setTitle("Confirm", for: .normal)
-        confirmButton.setTitleColor(.white, for: .normal)
+        confirmButton.setTitleColor(.black, for: .normal)
     }
     
     @IBAction func walkthroughButtonClicked(_ sender: UIButton) {
