@@ -3,6 +3,7 @@
 import UIKit
 
 import RealmSwift
+import Toast
 
 class MainViewController: UIViewController {
     
@@ -150,6 +151,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        print(#function)
         
         var row: Memo
         if self.pinnedMemo.isEmpty {
@@ -158,9 +160,18 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
             indexPath.section == 0 ? (row = self.pinnedMemo[indexPath.row]) : (row = self.unpinnedMemo[indexPath.row])
         }
         
+        let pinnedMemoCount = pinnedMemo.count
+        
         let pin = UIContextualAction(style: .normal, title: nil
                                      , handler: { action, view, completion in
-                
+        
+                if pinnedMemoCount >= 5 {
+                    let style = ToastManager.customToast
+                    self.view.makeToast("고정이 가능한 메모는 최대 5개입니다", duration: 1.5, position: .center, style: style)
+                    tableView.reloadData()
+                    return
+                }
+            
                 try! self.localRealm.write {
                     row.memoPinned = !row.memoPinned
                     self.reloadData()
@@ -187,14 +198,18 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         }
         
         let delete = UIContextualAction(style: .normal, title: nil, handler: { action, view, completion in
+                
             
-                try! self.localRealm.write {
-                    self.localRealm.delete(row)
-                    self.reloadData()
+                self.showAlert(title: "메모", message: "메모를 삭제하시겠습니까?", okTitle: "OK") {
+                    try! self.localRealm.write {
+                        self.localRealm.delete(row)
+                        self.reloadData()
+                    }
+                    print("delete performed")
                 }
-
-                print("delete performed")
+                
                 completion(true)
+            
            })
      
         delete.image = UIImage(systemName: "trash.fill")

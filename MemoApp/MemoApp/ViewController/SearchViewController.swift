@@ -30,6 +30,7 @@ class SearchViewController: UIViewController {
         searchBar.delegate = self
         
         searchBar.becomeFirstResponder()
+        searchBar.keyboardType = .default
         
         searchBar.setValue("Cancle", forKey: "cancelButtonText")
         searchBar.setShowsCancelButton(true, animated: true)
@@ -77,7 +78,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
         row = searchMemo[indexPath.row]
         
         /* configure tableview cell */
-        cell.configureCell(row: row)
+        cell.configureCell(row: row, searchText: searchBar.text)
         
         return cell
     }
@@ -196,6 +197,7 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
     
         reloadData()
+        
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {

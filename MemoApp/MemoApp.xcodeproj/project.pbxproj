@@ -24,8 +24,10 @@
 		B98170AF2738EE3B00057AE4 /* WriteEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98170AE2738EE3B00057AE4 /* WriteEditViewController.swift */; };
 		B98170B42738F65F00057AE4 /* MemoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98170B32738F65F00057AE4 /* MemoTableViewCell.swift */; };
 		B98170B62738FAAC00057AE4 /* RealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98170B52738FAAC00057AE4 /* RealmModel.swift */; };
+		B985DFA32740F0ED00199BEF /* Toast+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B985DFA22740F0ED00199BEF /* Toast+Extension.swift */; };
+		B985DFA52740F26200199BEF /* Alert+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B985DFA42740F26200199BEF /* Alert+Extension.swift */; };
 		B9D4A8FA273E4949009F177F /* RealmQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D4A8F9273E4949009F177F /* RealmQuery.swift */; };
-		B9D4A8FD273F8A4E009F177F /* DateFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D4A8FC273F8A4E009F177F /* DateFormatter+Extension.swift */; };
+		B9D4A8FD273F8A4E009F177F /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D4A8FC273F8A4E009F177F /* Date+Extension.swift */; };
 		B9D4A900273FD0A1009F177F /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = B9D4A8FF273FD0A1009F177F /* Toast */; };
 /* End PBXBuildFile section */
 
@@ -47,8 +49,10 @@
 		B98170AE2738EE3B00057AE4 /* WriteEditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteEditViewController.swift; sourceTree = "<group>"; };
 		B98170B32738F65F00057AE4 /* MemoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoTableViewCell.swift; sourceTree = "<group>"; };
 		B98170B52738FAAC00057AE4 /* RealmModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmModel.swift; sourceTree = "<group>"; };
+		B985DFA22740F0ED00199BEF /* Toast+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Toast+Extension.swift"; sourceTree = "<group>"; };
+		B985DFA42740F26200199BEF /* Alert+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Alert+Extension.swift"; sourceTree = "<group>"; };
 		B9D4A8F9273E4949009F177F /* RealmQuery.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmQuery.swift; sourceTree = "<group>"; };
-		B9D4A8FC273F8A4E009F177F /* DateFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+Extension.swift"; sourceTree = "<group>"; };
+		B9D4A8FC273F8A4E009F177F /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,7 +145,9 @@
 		B9D4A8FB273F8A18009F177F /* Extension */ = {
 			isa = PBXGroup;
 			children = (
-				B9D4A8FC273F8A4E009F177F /* DateFormatter+Extension.swift */,
+				B9D4A8FC273F8A4E009F177F /* Date+Extension.swift */,
+				B985DFA22740F0ED00199BEF /* Toast+Extension.swift */,
+				B985DFA42740F26200199BEF /* Alert+Extension.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -230,16 +236,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				B93D9387273BC19700BD2FB2 /* SearchTableViewCell.swift in Sources */,
+				B985DFA52740F26200199BEF /* Alert+Extension.swift in Sources */,
 				B98170B62738FAAC00057AE4 /* RealmModel.swift in Sources */,
 				B9D4A8FA273E4949009F177F /* RealmQuery.swift in Sources */,
 				B95EAFE0273B9B0D00524EFB /* WalkthroughViewController.swift in Sources */,
 				B98170972738EC3F00057AE4 /* MainViewController.swift in Sources */,
-				B9D4A8FD273F8A4E009F177F /* DateFormatter+Extension.swift in Sources */,
+				B9D4A8FD273F8A4E009F177F /* Date+Extension.swift in Sources */,
 				B98170B42738F65F00057AE4 /* MemoTableViewCell.swift in Sources */,
 				B98170932738EC3F00057AE4 /* AppDelegate.swift in Sources */,
 				B98170AB2738EDD300057AE4 /* SearchViewController.swift in Sources */,
 				B98170AF2738EE3B00057AE4 /* WriteEditViewController.swift in Sources */,
 				B98170952738EC3F00057AE4 /* SceneDelegate.swift in Sources */,
+				B985DFA32740F0ED00199BEF /* Toast+Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

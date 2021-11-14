@@ -20,7 +20,7 @@ class SearchTableViewCell: UITableViewCell {
         // Initialization code
     }
     
-    func configureCell(row: Memo) {
+    func configureCell(row: Memo, searchText: String?) {
      
         self.contentView.layer.cornerRadius = 10
         self.backgroundColor = .systemGray6
@@ -29,9 +29,18 @@ class SearchTableViewCell: UITableViewCell {
          텍스트 컬러를 변경해주어야 함!!!
          */
         
+        
+        
+        
+
         memoTitleLabel.text = row.memoTitle
         memoTitleLabel.font = .systemFont(ofSize: 17, weight: .semibold)
         memoTitleLabel.textColor = .white
+        
+        let titleRange = (memoTitleLabel.text! as NSString).range(of: searchText ?? "")
+        let mutableAttributedStringTitle = NSMutableAttributedString.init(string: memoTitleLabel.text!)
+        mutableAttributedStringTitle.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.systemOrange, range: titleRange)
+        memoTitleLabel.attributedText = mutableAttributedStringTitle
         
         memoTimeLabel.text = row.memoTime
         memoTimeLabel.font = .systemFont(ofSize: 15, weight: .regular)
@@ -40,6 +49,11 @@ class SearchTableViewCell: UITableViewCell {
         memoContentLabel.text = row.memoContent
         memoContentLabel.font = .systemFont(ofSize: 15, weight: .regular)
         memoContentLabel.textColor = .systemGray
+        
+        let contentRange = (memoContentLabel.text! as NSString).range(of: searchText ?? "")
+        let mutableAttributedStringContent = NSMutableAttributedString.init(string: memoTitleLabel.text!)
+        mutableAttributedStringContent.addAttribute(NSAttributedString.Key.foregroundColor, value: UIColor.systemOrange, range: contentRange)
+        memoContentLabel.attributedText = mutableAttributedStringContent
     }
 
 

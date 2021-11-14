@@ -73,7 +73,7 @@ class WriteEditViewController: UIViewController {
         if let content = result.last, title != content {
             memo?.memoContent = content
         } else {
-            memo?.memoContent = "New additional text"
+            memo?.memoContent = "No additional text"
         }
         
         guard let row = memo else { return }
@@ -101,7 +101,7 @@ class WriteEditViewController: UIViewController {
             if let content = result.last, title != content {
                 memo?.memoContent = content
             } else {
-                memo?.memoContent = "New additional text"
+                memo?.memoContent = "No additional text"
             }
         }
     }

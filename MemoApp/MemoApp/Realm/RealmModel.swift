@@ -23,7 +23,7 @@ class Memo: Object {
     // PK 이름은 _로 시작하는 것을 권장
     @Persisted(primaryKey: true) var _id: ObjectId
     
-    convenience init(date: Date, time: String, text: String? = nil, title: String? = "New Note", content: String? = "New additional text", pinned: Bool = false) {
+    convenience init(date: Date, time: String, text: String? = nil, title: String? = "New Note", content: String? = "No additional text", pinned: Bool = false) {
         self.init()
         
         self.memoDate = date
