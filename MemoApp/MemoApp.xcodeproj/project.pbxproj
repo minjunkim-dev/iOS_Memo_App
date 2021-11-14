@@ -26,6 +26,7 @@
 		B98170B62738FAAC00057AE4 /* RealmModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B98170B52738FAAC00057AE4 /* RealmModel.swift */; };
 		B9D4A8FA273E4949009F177F /* RealmQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D4A8F9273E4949009F177F /* RealmQuery.swift */; };
 		B9D4A8FD273F8A4E009F177F /* DateFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9D4A8FC273F8A4E009F177F /* DateFormatter+Extension.swift */; };
+		B9D4A900273FD0A1009F177F /* Toast in Frameworks */ = {isa = PBXBuildFile; productRef = B9D4A8FF273FD0A1009F177F /* Toast */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9D4A900273FD0A1009F177F /* Toast in Frameworks */,
 				B94105FD273BB11200684B5A /* RealmSwift in Frameworks */,
 				B94105FB273BB11200684B5A /* Realm in Frameworks */,
 			);
@@ -163,6 +165,7 @@
 			packageProductDependencies = (
 				B94105FA273BB11200684B5A /* Realm */,
 				B94105FC273BB11200684B5A /* RealmSwift */,
+				B9D4A8FF273FD0A1009F177F /* Toast */,
 			);
 			productName = MemoApp;
 			productReference = B981708F2738EC3F00057AE4 /* MemoApp.app */;
@@ -194,6 +197,7 @@
 			mainGroup = B98170862738EC3F00057AE4;
 			packageReferences = (
 				B94105F9273BB11200684B5A /* XCRemoteSwiftPackageReference "realm-cocoa" */,
+				B9D4A8FE273FD0A1009F177F /* XCRemoteSwiftPackageReference "Toast-Swift" */,
 			);
 			productRefGroup = B98170902738EC3F00057AE4 /* Products */;
 			projectDirPath = "";
@@ -467,6 +471,14 @@
 				version = 10.18.0;
 			};
 		};
+		B9D4A8FE273FD0A1009F177F /* XCRemoteSwiftPackageReference "Toast-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scalessec/Toast-Swift";
+			requirement = {
+				kind = exactVersion;
+				version = 5.0.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -479,6 +491,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B94105F9273BB11200684B5A /* XCRemoteSwiftPackageReference "realm-cocoa" */;
 			productName = RealmSwift;
+		};
+		B9D4A8FF273FD0A1009F177F /* Toast */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B9D4A8FE273FD0A1009F177F /* XCRemoteSwiftPackageReference "Toast-Swift" */;
+			productName = Toast;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -15,27 +15,35 @@ class SearchViewController: UIViewController {
     @IBOutlet weak var searchBar: UISearchBar!
     
     let localRealm = try! Realm()
-    
+
     var searchMemo: Results<Memo>!
-    var searchMemoCount: Int!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        navigationController?.navigationBar.tintColor = .systemYellow
+        
         tableView.delegate = self
         tableView.dataSource = self
         searchBar.delegate = self
         
         searchBar.becomeFirstResponder()
         
+        searchBar.setValue("Cancle", forKey: "cancelButtonText")
+        searchBar.setShowsCancelButton(true, animated: true)
+        
         searchMemo = searchQueryFromMemo(text: searchBar.text ?? "")
-        searchMemoCount = searchMemo.count
+        
+        
     }
     
-    @IBAction func cancleButtonClicked(_ sender: UIButton) {
-        
-        self.dismiss(animated: true, completion: nil)
+    func reloadData() {
+        print("Realm is located at:", self.localRealm.configuration.fileURL!)
+        searchMemo = searchQueryFromMemo(text: searchBar.text ?? "")
+
+        tableView.reloadData()
     }
 }
 
@@ -43,7 +51,11 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
     
-        return "\(searchMemoCount)개 찾음"
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        let memoCount = numberFormatter.string(for: searchMemo.count) ?? "0"
+        
+        return "\(memoCount) Found"
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -52,7 +64,7 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
                 
-        return searchMemoCount
+        return searchMemo.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -73,26 +85,47 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return UIScreen.main.bounds.height / 12
     }
-
+    
+    func tableView(_ tableView: UITableView, didEndDisplayingHeaderView view: UIView, forSection section: Int) {
+        let header = view as? UITableViewHeaderFooterView
+        header?.textLabel?.textColor = .white
+        header?.textLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
+    }
+    
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let row = searchMemo[indexPath.row]
         
         let pin = UIContextualAction(style: .normal, title: nil
                                      , handler: { action, view, completion in
-                print("pin performed")
+                
+                try! self.localRealm.write {
+                    row.memoPinned = !row.memoPinned
+                    self.reloadData()
+                }
+            
+                print("pinned or unpinned performed")
                 completion(true)
             })
         
-        pin.image = UIImage(systemName: "pin.fill")
+        row.memoPinned ? (pin.image = UIImage(systemName: "pin.slash.fill")) : (pin.image = UIImage(systemName: "pin.fill"))
         pin.image?.withTintColor(.white)
         pin.backgroundColor = .systemOrange
             
         return UISwipeActionsConfiguration(actions: [pin])
     }
     
-    
-//    수정, 삭제 기능을 실제로 추가하여야 함
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+      
+        let row = searchMemo[indexPath.row]
+        
         let delete = UIContextualAction(style: .normal, title: nil, handler: { action, view, completion in
+            
+                try! self.localRealm.write {
+                    self.localRealm.delete(row)
+                    self.reloadData()
+                }
+
                 print("delete performed")
                 completion(true)
            })
@@ -117,14 +150,12 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 
     }
     
-    
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         print(#function)
         
         view.endEditing(true)
     }
-    
-    // 메모 수정
+
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print(#function)
         
@@ -132,11 +163,25 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
     
         guard let vc = storyboard.instantiateViewController(withIdentifier: "WriteEditViewController") as? WriteEditViewController else { return }
         
-        vc.selectCellActionHandler = {
-            print("selectCellActionHandler")
-            self.navigationItem.backButtonTitle = "검색"
-        }
+        navigationItem.backButtonTitle = "Search"
                 
+        vc.backButtonActionHandler = {
+            vc.editMemo()
+            vc.navigationController?.popViewController(animated: true)
+            tableView.reloadData()
+        }
+    
+        let row = searchMemo[indexPath.row]
+        
+        let date = row.memoDate
+        let time = row.memoTime
+        
+        try! localRealm.write {
+            row.memoDate = date
+            row.memoTime = time
+            vc.memo = row
+        }
+        
         navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -144,18 +189,18 @@ extension SearchViewController: UITableViewDelegate, UITableViewDataSource {
 extension SearchViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print(#function)
 
         view.endEditing(true)
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print(#function)
-        
-        /*
-         실시간으로 현재 저장된 "전체 메모" 중에서
-         (제목 or 내용) 중 검색 텍스트를 "포함"한 메모들을 검색하여 찾아내고,
-         이를 searchedMemos에 저장한 후, reloadData()!!!
-         */
+    
+        reloadData()
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = nil
+        searchBar.setShowsCancelButton(false, animated: true)
+        self.dismiss(animated: true, completion: nil)
     }
 }

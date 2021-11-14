@@ -70,6 +70,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="confirmButton" destination="6Ae-LR-cAa" id="zRC-Ry-zdy"/>
                         <outlet property="walkthroughView" destination="LGr-A5-dJE" id="LM0-4G-fJF"/>
                     </connections>
                 </viewController>

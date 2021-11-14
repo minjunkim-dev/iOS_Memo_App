@@ -16,7 +16,6 @@ class WriteEditViewController: UIViewController {
     let localRealm = try! Realm()
     
     var writeButtonActionHandler: (() -> Void)?
-    var selectCellActionHandler: (() -> Void)?
     var backButtonActionHandler: (() -> Void)?
     
     var shareButton: UIBarButtonItem!
@@ -26,21 +25,19 @@ class WriteEditViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
         
         textView.delegate = self
         textView.text = memo?.memoText
         
-        navigationController?.navigationBar.tintColor = .systemYellow
-        navigationController?.navigationBar.barTintColor = .systemGray6
-        
         shareButton = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(shareButtonClicked))
         
         compeletionButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(completionButtonClicked))
         
+        navigationItem.rightBarButtonItems
+         = [shareButton]
+        
         writeButtonActionHandler?()
-        selectCellActionHandler?()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -53,7 +50,6 @@ class WriteEditViewController: UIViewController {
     }
     
     @objc func completionButtonClicked() {
-        print(#function)
                 
         navigationItem.rightBarButtonItems
          = [shareButton]
@@ -83,22 +79,18 @@ class WriteEditViewController: UIViewController {
         guard let row = memo else { return }
         
         try! self.localRealm.write {
-            print("메모 쓰는중")
             localRealm.add(row)
         }
-        
     }
     
     func editMemo() {
     
-        
         let text = textView.text.components(separatedBy: CharacterSet.newlines)
         
         let result = text.filter { !($0.trimmingCharacters(in: .whitespaces).isEmpty) }
         
         try! localRealm.write {
             memo?.memoText = textView.text
-            print("메모 수정중")
             guard let title = result.first else {
                 memo?.memoTitle = "New Note"
                 return
@@ -115,14 +107,19 @@ class WriteEditViewController: UIViewController {
     }
     
     @objc func shareButtonClicked() {
+        
+        completionButtonClicked()
+        editMemo()
+        
         presentActivityViewController()
     }
         
     func presentActivityViewController() {
         
-        let shareText: String = "share text test!" // dummy
+        /* Memo 구조체 자체를 저장할 순 없을까? */
+        guard let shareMemo = memo?.memoText else { return }
         var shareObject = [Any]()
-        shareObject.append(shareText)
+        shareObject.append(shareMemo)
         
         let activityViewController = UIActivityViewController(activityItems : shareObject, applicationActivities: [])
         

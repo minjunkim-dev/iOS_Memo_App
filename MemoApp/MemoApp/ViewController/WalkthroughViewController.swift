@@ -10,6 +10,7 @@ import UIKit
 class WalkthroughViewController: UIViewController {
 
     @IBOutlet weak var walkthroughView: UIView!
+    @IBOutlet weak var confirmButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +23,12 @@ class WalkthroughViewController: UIViewController {
         walkthroughView.backgroundColor = .systemGray6
         walkthroughView.layer.cornerRadius = 20
         walkthroughView.clipsToBounds = true
+        
+        confirmButton.backgroundColor = .systemYellow
+        confirmButton.layer.cornerRadius = 10
+        confirmButton.clipsToBounds = true
+        confirmButton.setTitle("Confirm", for: .normal)
+        confirmButton.setTitleColor(.white, for: .normal)
     }
     
     @IBAction func walkthroughButtonClicked(_ sender: UIButton) {

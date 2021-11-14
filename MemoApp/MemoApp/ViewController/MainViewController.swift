@@ -23,11 +23,12 @@ class MainViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         searchBar.delegate = self
-
-        self.navigationItem.largeTitleDisplayMode = .always
-
+        
+        navigationController?.navigationBar.tintColor = .systemYellow
+        navigationController?.isToolbarHidden = false
+        navigationItem.largeTitleDisplayMode = .always
         writeButton.tintColor = .systemYellow
-        self.navigationController?.isToolbarHidden = false
+        
         
         if !isAppAlreadyLaunchedOnce() {
             
@@ -37,12 +38,18 @@ class MainViewController: UIViewController {
         
             vc.modalPresentationStyle = .overCurrentContext
         
-            self.present(vc, animated: true, completion: nil)
+            present(vc, animated: true, completion: nil)
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        reloadData()
+    }
+    
+    func reloadData() {
+        print(#function)
         
         print("Realm is located at:", localRealm.configuration.fileURL!)
         unpinnedMemo = getMemo(pinned: false)
@@ -51,7 +58,7 @@ class MainViewController: UIViewController {
         let numberFormatter = NumberFormatter()
         numberFormatter.numberStyle = .decimal
         let memoCount = numberFormatter.string(for: getAllMemo().count) ?? "0"
-        self.navigationItem.title = "\(memoCount) Notes"
+        navigationItem.title = "\(memoCount) Notes"
         
         tableView.reloadData()
     }
@@ -62,15 +69,12 @@ class MainViewController: UIViewController {
     
         guard let vc = storyboard.instantiateViewController(withIdentifier: "WriteEditViewController") as? WriteEditViewController else { return }
         
+        navigationItem.backButtonTitle = "Memo"
         vc.writeButtonActionHandler = {
-            print("writeButtonActionHandler")
-            self.navigationItem.backButtonTitle = "Memo"
             vc.textView.becomeFirstResponder()
         }
         
         vc.backButtonActionHandler = {
-            print("backButtonActionHandler")
-            
             vc.writeMemo()
             vc.navigationController?.popViewController(animated: true)
         }
@@ -131,13 +135,8 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         var row: Memo
         if pinnedMemo.isEmpty {
             row = unpinnedMemo[indexPath.row]
-            
         } else {
-            if indexPath.section == 0 {
-                row = pinnedMemo[indexPath.row]
-            } else {
-                row = unpinnedMemo[indexPath.row]
-            }
+            indexPath.section == 0 ? (row = pinnedMemo[indexPath.row]) : (row = unpinnedMemo[indexPath.row])
         }
         
         /* configure tableview cell */
@@ -152,37 +151,26 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, leadingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         
+        var row: Memo
+        if self.pinnedMemo.isEmpty {
+            row = self.unpinnedMemo[indexPath.row]
+        } else {
+            indexPath.section == 0 ? (row = self.pinnedMemo[indexPath.row]) : (row = self.unpinnedMemo[indexPath.row])
+        }
+        
         let pin = UIContextualAction(style: .normal, title: nil
                                      , handler: { action, view, completion in
-                            
-//                var row: Memo
-//
-//                if self.pinnedMemo.isEmpty {
-//                    row = self.unpinnedMemo[indexPath.row]
-//                } else {
-//                    if indexPath.row == 0 { // pinned
-//                        row = self.pinnedMemo[indexPath.row]
-//                    } else { // unpinned
-//                        row = self.unpinnedMemo[indexPath.row]
-//                    }
-//                }
-//
-//                try! self.localRealm.write {
-//                    self.localRealm.delete(row)
-//                }
-//
-//                row.memoPinned = !(row.memoPinned)
-//
-//                try! self.localRealm.write {
-//                    self.localRealm.add(row)
-//                    tableView.reloadData()
-//                }
-//
-                print("pinned performed")
+                
+                try! self.localRealm.write {
+                    row.memoPinned = !row.memoPinned
+                    self.reloadData()
+                }
+            
+                print("pinned or unpinned performed")
                 completion(true)
             })
         
-        pin.image = UIImage(systemName: "pin.fill")
+        row.memoPinned ? (pin.image = UIImage(systemName: "pin.slash.fill")) : (pin.image = UIImage(systemName: "pin.fill"))
         pin.image?.withTintColor(.white)
         pin.backgroundColor = .systemOrange
             
@@ -190,23 +178,20 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+      
+        var row: Memo
+        if self.pinnedMemo.isEmpty {
+            row = self.unpinnedMemo[indexPath.row]
+        } else {
+            indexPath.section == 0 ? (row = self.pinnedMemo[indexPath.row]) : (row = self.unpinnedMemo[indexPath.row])
+        }
+        
         let delete = UIContextualAction(style: .normal, title: nil, handler: { action, view, completion in
             
-//                var row: Memo
-//                if self.pinnedMemo.isEmpty {
-//                    row = self.unpinnedMemo[indexPath.row]
-//                } else {
-//                    if indexPath.row == 0 { // pinned
-//                        row = self.pinnedMemo[indexPath.row]
-//                    } else { // unpinned
-//                        row = self.unpinnedMemo[indexPath.row]
-//                    }
-//                }
-//
-//                try! self.localRealm.write {
-//                    self.localRealm.delete(row)
-//                    tableView.reloadData()
-//                }
+                try! self.localRealm.write {
+                    self.localRealm.delete(row)
+                    self.reloadData()
+                }
 
                 print("delete performed")
                 completion(true)
@@ -233,20 +218,14 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(#function)
-        
+
         let storyboard = UIStoryboard(name: "WriteEdit", bundle: nil)
     
         guard let vc = storyboard.instantiateViewController(withIdentifier: "WriteEditViewController") as? WriteEditViewController else { return }
         
-        vc.selectCellActionHandler = {
-            print("selectCellActionHandler")
-            self.navigationItem.backButtonTitle = "Memo"
-        }
-        
+        navigationItem.backButtonTitle = "Memo"
+     
         vc.backButtonActionHandler = {
-            print("backButtonActionHandler")
-            
             vc.editMemo()
             vc.navigationController?.popViewController(animated: true)
         }
@@ -279,13 +258,13 @@ extension MainViewController: UISearchBarDelegate {
         let storyboard = UIStoryboard(name: "Search", bundle: nil)
 
         guard let vc = storyboard.instantiateViewController(withIdentifier: "SearchViewController") as? SearchViewController else { return }
-        
+
         let nav = UINavigationController(rootViewController: vc)
 
         nav.modalPresentationStyle = .fullScreen
         nav.modalTransitionStyle = .crossDissolve
         
-        self.present(nav, animated: true, completion: nil)
+        present(nav, animated: true, completion: nil)
     }
 }
 

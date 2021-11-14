@@ -22,35 +22,23 @@
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uTg-hK-1ow">
-                                        <rect key="frame" x="0.0" y="88" width="414" height="64"/>
+                                        <rect key="frame" x="0.0" y="44" width="414" height="64"/>
                                         <subviews>
-                                            <searchBar contentMode="redraw" placeholder="Search" translatesAutoresizingMaskIntoConstraints="NO" id="jGU-2V-72Q">
-                                                <rect key="frame" x="20" y="10" width="285.5" height="44"/>
+                                            <searchBar contentMode="redraw" placeholder="Search" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jGU-2V-72Q">
+                                                <rect key="frame" x="20" y="10" width="374" height="44"/>
                                                 <textInputTraits key="textInputTraits"/>
                                             </searchBar>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0ab-Xf-7Ur">
-                                                <rect key="frame" x="325.5" y="10" width="68.5" height="44"/>
-                                                <color key="tintColor" systemColor="systemOrangeColor"/>
-                                                <state key="normal" title="Button"/>
-                                                <buttonConfiguration key="configuration" style="plain" title="Cancel"/>
-                                                <connections>
-                                                    <action selector="cancleButtonClicked:" destination="Y6W-OH-hqX" eventType="touchUpInside" id="TTl-O6-2pp"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="0ab-Xf-7Ur" secondAttribute="trailing" constant="20" id="9bf-jx-JkK"/>
-                                            <constraint firstItem="0ab-Xf-7Ur" firstAttribute="top" secondItem="uTg-hK-1ow" secondAttribute="top" constant="10" id="Dai-Ut-p4G"/>
                                             <constraint firstItem="jGU-2V-72Q" firstAttribute="leading" secondItem="uTg-hK-1ow" secondAttribute="leading" constant="20" id="Ggq-Uk-LZM"/>
-                                            <constraint firstAttribute="bottom" secondItem="0ab-Xf-7Ur" secondAttribute="bottom" constant="10" id="Ths-wc-SJq"/>
+                                            <constraint firstAttribute="trailing" secondItem="jGU-2V-72Q" secondAttribute="trailing" constant="20" id="bhA-1S-sYT"/>
                                             <constraint firstAttribute="bottom" secondItem="jGU-2V-72Q" secondAttribute="bottom" constant="10" id="oMb-zr-5Yc"/>
-                                            <constraint firstItem="0ab-Xf-7Ur" firstAttribute="leading" secondItem="jGU-2V-72Q" secondAttribute="trailing" constant="20" id="q0H-iG-1sI"/>
                                             <constraint firstItem="jGU-2V-72Q" firstAttribute="top" secondItem="uTg-hK-1ow" secondAttribute="top" constant="10" id="w8T-CW-9TJ"/>
                                         </constraints>
                                     </view>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="insetGrouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" estimatedSectionHeaderHeight="-1" sectionFooterHeight="18" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="ckm-QS-M5L">
-                                        <rect key="frame" x="0.0" y="152" width="414" height="744"/>
+                                        <rect key="frame" x="0.0" y="108" width="414" height="788"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchTableViewCell" rowHeight="98" id="uuU-kd-2FH" customClass="SearchTableViewCell" customModule="MemoApp" customModuleProvider="target">
@@ -130,31 +118,10 @@
             </objects>
             <point key="canvasLocation" x="2759.4202898550725" y="79.6875"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="cKf-B7-hgh">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="SdG-Wd-c1c" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="cLk-uA-MQO">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="Y6W-OH-hqX" kind="relationship" relationship="rootViewController" id="i0N-cP-Faq"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="iZ1-zo-EnG" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1849.2753623188407" y="79.6875"/>
-        </scene>
     </scenes>
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
