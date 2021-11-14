@@ -1,6 +1,8 @@
 # iOS_Memo_App
 
 ## 가이드라인 및 iOS 기본 앱이 메모앱을 토대로 구현하였습니다.
+![Simulator Screen Recording - iPhone 13 Pro Max - 2021-11-14 at 19 26 05-2](https://user-images.githubusercontent.com/86342736/141677385-97d3f718-bf99-4bbb-9851-0fb7a5034a6d.gif)
+
 
 ### 추가로 필요한 작업들
 1. light 모드 대응: dark 모드에 대해서 구현하였기 때문에, light 모드에도 대응이 필요
